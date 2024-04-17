@@ -1,4 +1,6 @@
-﻿using BlogApp.Respositories;
+﻿using BlogApp.Models;
+using BlogApp.Respositories;
+using BlogApp.ViewModels;
 
 namespace BlogApp.Services;
 
@@ -9,5 +11,21 @@ public class BlogService
     public BlogService(BlogRepository blogRepository)
     {
         this.blogRepository = blogRepository;
+    }
+    public async Task<bool> SaveAsync(BlogCreateViewModel request)
+    {
+        request.UserId= Guid.NewGuid();
+        Blog blog= new Blog()
+        {
+            Content = request.Content,
+            Tags = request.Tags.ToArray(),
+            Title = request.Title,
+            UserId = request.UserId,
+
+        };
+        var result= await blogRepository.SaveAsync(blog);
+        if (result == null) return false;
+        return true;
+
     }
 }

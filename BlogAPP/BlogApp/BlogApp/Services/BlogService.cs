@@ -14,13 +14,13 @@ public class BlogService
     }
     public async Task<bool> SaveAsync(BlogCreateViewModel request)
     {
-        request.UserId= Guid.NewGuid();
+        
         Blog blog= new Blog()
         {
             Content = request.Content,
-            Tags = request.Tags.ToArray(),
+            Tags = request.Tags.Split(","),
             Title = request.Title,
-            UserId = request.UserId,
+            UserId = Guid.NewGuid(),
 
         };
         var result= await blogRepository.SaveAsync(blog);
